@@ -7,6 +7,51 @@ import (
 
 func init() {
 
+    beego.GlobalControllerRouter["bee-playaround1/controllers:AuthController"] = append(beego.GlobalControllerRouter["bee-playaround1/controllers:AuthController"],
+        beego.ControllerComments{
+            Method: "Login",
+            Router: "/login",
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["bee-playaround1/controllers:AuthController"] = append(beego.GlobalControllerRouter["bee-playaround1/controllers:AuthController"],
+        beego.ControllerComments{
+            Method: "Register",
+            Router: "/register",
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["bee-playaround1/controllers:CategoryController"] = append(beego.GlobalControllerRouter["bee-playaround1/controllers:CategoryController"],
+        beego.ControllerComments{
+            Method: "Create",
+            Router: "/",
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["bee-playaround1/controllers:CategoryController"] = append(beego.GlobalControllerRouter["bee-playaround1/controllers:CategoryController"],
+        beego.ControllerComments{
+            Method: "GetAllCategory",
+            Router: "/",
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["bee-playaround1/controllers:CategoryController"] = append(beego.GlobalControllerRouter["bee-playaround1/controllers:CategoryController"],
+        beego.ControllerComments{
+            Method: "Get",
+            Router: "/:id",
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["bee-playaround1/controllers:PostController"] = append(beego.GlobalControllerRouter["bee-playaround1/controllers:PostController"],
         beego.ControllerComments{
             Method: "CreatePost",
@@ -52,24 +97,6 @@ func init() {
             Method: "GetAll",
             Router: "/",
             AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["bee-playaround1/controllers:UserController"] = append(beego.GlobalControllerRouter["bee-playaround1/controllers:UserController"],
-        beego.ControllerComments{
-            Method: "Login",
-            Router: "/login",
-            AllowHTTPMethods: []string{"post"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["bee-playaround1/controllers:UserController"] = append(beego.GlobalControllerRouter["bee-playaround1/controllers:UserController"],
-        beego.ControllerComments{
-            Method: "Register",
-            Router: "/register",
-            AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})

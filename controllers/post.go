@@ -3,9 +3,11 @@ package controllers
 import (
 	"bee-playaround1/constants"
 	"bee-playaround1/dtos"
+	"bee-playaround1/helper"
 	"bee-playaround1/models"
 	"encoding/json"
 	beego "github.com/beego/beego/v2/server/web"
+	"net/http"
 )
 
 type PostController struct {
@@ -25,13 +27,13 @@ func (p *PostController) CreatePost() {
 	json.Unmarshal(p.Ctx.Input.RequestBody, &createPostDto)
 	err := user.FindById(int64(createPostDto.UserId))
 	if err != nil {
-		models.NewInternalException(&p.Controller, constants.CREATE_POST_ERROR, err)
+		helper.NewHttpException(&p.Controller, constants.CREATE_POST_ERROR, err, http.StatusInternalServerError)
 		return
 	}
 
 	err = post.CreatePost(createPostDto.Content, createPostDto.Title, &user)
 	if err != nil {
-		models.NewInternalException(&p.Controller, constants.CREATE_POST_ERROR, err)
+		helper.NewHttpException(&p.Controller, constants.CREATE_POST_ERROR, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -48,7 +50,7 @@ func (p *PostController) GetPosts() {
 	var post models.Post
 	posts, err := post.GetPosts()
 	if err != nil {
-		models.NewInternalException(&p.Controller, "Khong the lay bai viet", err)
+		helper.NewHttpException(&p.Controller, constants.GET_POST_ERROR, err, http.StatusInternalServerError)
 		return
 	}
 	p.Data["json"] = posts
@@ -65,7 +67,7 @@ func (p *PostController) GetPost(id int64) {
 	var postModel models.Post
 	post, err := postModel.GetPost(id)
 	if err != nil {
-		models.NewInternalException(&p.Controller, "Khong the lay bai viet", err)
+		helper.NewHttpException(&p.Controller, constants.GET_POST_ERROR, err, http.StatusInternalServerError)
 		return
 	}
 	p.Data["json"] = post
@@ -82,9 +84,9 @@ func (p *PostController) DeletePost(id int64) {
 	var postModel models.Post
 	err := postModel.DeletePost(id)
 	if err != nil {
-		models.NewInternalException(&p.Controller, "Khong the xoa bai viet", err)
+		helper.NewHttpException(&p.Controller, constants.DELETE_POST_ERROR, err, http.StatusInternalServerError)
 		return
 	}
-	p.Data["json"] = map[string]string{"Message": "Delete success!"}
+	p.Data["json"] = map[string]string{"Message": constants.DELETE_POST_SUCCESS}
 	p.ServeJSON()
 }

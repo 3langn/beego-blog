@@ -8,10 +8,11 @@ import (
 )
 
 type User struct {
-	Id       int64   `orm:"auto" json:"id"`
-	Username string  `orm:"unique;size(255)" json:"username"`
-	Password string  `orm:"size(255)" json:"-"`
-	Posts    []*Post `orm:"reverse(many)" json:"posts,omitempty"`
+	Id       int64    `orm:"auto" json:"id"`
+	Username string   `orm:"unique;size(255)" json:"username"`
+	Password string   `orm:"size(255)" json:"-"`
+	Posts    []*Post  `orm:"reverse(many)" json:"posts,omitempty"`
+	Token    []*Token `orm:"reverse(many)" json:"token,omitempty"`
 }
 
 func (u *User) TableName() string {
@@ -33,7 +34,7 @@ func (u *User) Save(username string, password string) error {
 
 func (u *User) GetAll() ([]*User, error) {
 	var users []*User
-	if _, err := orm.NewOrm().QueryTable("users").All(&users); err != nil {
+	if _, err := orm.NewOrm().QueryTable(u.TableName()).All(&users); err != nil {
 		panic(err)
 		return nil, err
 	}
@@ -42,7 +43,7 @@ func (u *User) GetAll() ([]*User, error) {
 
 func (u *User) FindByUsername(username string) error {
 	o := orm.NewOrm()
-	if err := o.QueryTable("users").Filter("username", username).One(u); err != nil {
+	if err := o.QueryTable(u.TableName()).Filter("username", username).One(u); err != nil {
 		return err
 	}
 	return nil

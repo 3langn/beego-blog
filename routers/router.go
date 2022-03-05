@@ -16,11 +16,17 @@ import (
 func init() {
 	// Swagger API only support NSNamespace
 	ns := beego.NewNamespace("/v1",
+		beego.NSNamespace("/auth",
+			beego.NSInclude(&controllers.AuthController{}),
+		),
 		beego.NSNamespace("/user",
 			beego.NSInclude(&controllers.UserController{}),
 		),
 		beego.NSNamespace("/post",
 			beego.NSInclude(&controllers.PostController{}),
+		),
+		beego.NSNamespace("/categories",
+			beego.NSInclude(&controllers.CategoryController{}),
 		),
 	)
 
