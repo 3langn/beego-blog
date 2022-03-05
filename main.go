@@ -13,7 +13,7 @@ func init() {
 	orm.Debug = true
 	orm.RegisterDriver("postgres", orm.DRPostgres)
 	orm.RegisterDataBase("default", "postgres", "postgres://postgres:saota1278@localhost:5435/bee?sslmode=disable")
-	orm.RegisterModel(new(models.User), new(models.Post), new(models.Token))
+	orm.RegisterModel(new(models.User), new(models.Category), new(models.Post), new(models.Token))
 	err := orm.RunSyncdb("default", false, true)
 	if err != nil {
 		log.Fatal(err)

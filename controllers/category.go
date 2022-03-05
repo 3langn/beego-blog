@@ -13,22 +13,22 @@ type CategoryController struct {
 	beego.Controller
 }
 
-// CRUD
-// @Title Create
-// @Description create category
-// @Param	body		body 	models.Category	true		"body for category content"
-// @Success 200 {int} models.Category.Id
-// @Failure 500 internal server error
-// @router / [post]
-func (c *CategoryController) Create() {
-	var category models.Category
-	if err := c.ParseForm(&category); err != nil {
-		helper.NewHttpException(&c.Controller, "Can't create category", err, http.StatusBadRequest)
-	} else {
-		c.Data["json"] = category.Create()
-	}
-	c.ServeJSON()
-}
+//// CRUD
+//// @Title Create
+//// @Description create category
+//// @Param	body		body 	models.Category	true		"body for category content"
+//// @Success 200 {int} models.Category.Id
+//// @Failure 500 internal server error
+//// @router / [post]
+//func (c *CategoryController) Create() {
+//	var category models.Category
+//	if err := c.ParseForm(&category); err != nil {
+//		helper.NewHttpException(&c.Controller, "Can't create category", err, http.StatusBadRequest)
+//	} else {
+//		c.Data["json"] = category.Create()
+//	}
+//	c.ServeJSON()
+//}
 
 // @Title Get
 // @Description get category by id

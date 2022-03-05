@@ -11,13 +11,6 @@ type AuthToken struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-type LoginResponse struct {
-	Message      string `json:"message"`
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
-	User         User   `json:"user"`
-}
-
 type Token struct {
 	Id    int64  `json:"id"`
 	Token string `orm:"size(256)" json:"token"`
@@ -65,8 +58,8 @@ func (t *Token) GenerateAuthToken(UserID int64) (*AuthToken, error) {
 	}
 
 	*t = Token{
-		Token: accessToken,
-		Type:  AccessTokenType,
+		Token: refreshToken,
+		Type:  RefreshTokenType,
 		User: &User{
 			Id: UserID,
 		},

@@ -20,10 +20,10 @@ paths:
       parameters:
       - in: body
         name: body
-        description: body for user content
+        description: body for user
         required: true
         schema:
-          $ref: '#/definitions/dtos.Login'
+          $ref: '#/definitions/models.LoginDto'
       responses:
         "200":
           description: '{int} body models.User'
@@ -41,7 +41,7 @@ paths:
         description: body for user content
         required: true
         schema:
-          $ref: '#/definitions/dtos.Login'
+          $ref: '#/definitions/models.LoginDto'
       responses:
         "200":
           description: '{int} body models.User'
@@ -56,7 +56,8 @@ paths:
       parameters:
       - in: query
         name: order
-        description: Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...
+        description: Order corresponding to each sortby field, if single value, apply
+          to all sortby fields. e.g. desc,asc ...
         type: string
       - in: query
         name: limit
@@ -73,23 +74,6 @@ paths:
             $ref: '#/definitions/models.Category'
         "500":
           description: Internal Server Error
-    post:
-      tags:
-      - categories
-      description: create category
-      operationId: CategoryController.Create
-      parameters:
-      - in: body
-        name: body
-        description: body for category content
-        required: true
-        schema:
-          $ref: '#/definitions/models.Category'
-      responses:
-        "200":
-          description: '{int} models.Category.Id'
-        "500":
-          description: internal server error
   /categories/{id}:
     get:
       tags:
@@ -115,6 +99,21 @@ paths:
       - post
       description: create post
       operationId: PostController.GetPosts
+      parameters:
+      - in: query
+        name: offset
+        description: offset
+        type: integer
+        format: int64
+      - in: query
+        name: limit
+        description: limit
+        type: integer
+        format: int64
+      - in: query
+        name: category_title
+        description: category_title
+        type: string
       responses:
         "200":
           description: '{int} body models.Post'
@@ -131,7 +130,7 @@ paths:
         description: body for post
         required: true
         schema:
-          $ref: '#/definitions/dtos.CreatePostDto'
+          $ref: '#/definitions/models.PostDto'
       responses:
         "200":
           description: '{int} body models.User'
@@ -155,8 +154,33 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/models.Post'
-        "500":
-          description: Internal Server Error
+        "404":
+          description: not found resource
+    put:
+      tags:
+      - post
+      description: update the post
+      operationId: PostController.UpdatePost
+      parameters:
+      - in: path
+        name: id
+        description: The id you want to update
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: body
+        description: body for post content
+        required: true
+        schema:
+          $ref: '#/definitions/models.PostDto'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Post'
+        "403":
+          description: :id is not int
     delete:
       tags:
       - post
@@ -186,25 +210,6 @@ paths:
         "403":
           description: body is empty
 definitions:
-  dtos.CreatePostDto:
-    title: CreatePostDto
-    type: object
-    properties:
-      content:
-        type: string
-      title:
-        type: string
-      user_id:
-        type: integer
-        format: int64
-  dtos.Login:
-    title: Login
-    type: object
-    properties:
-      password:
-        type: string
-      username:
-        type: string
   models.Category:
     title: Category
     type: object
@@ -220,17 +225,55 @@ definitions:
         type: string
       title:
         type: string
+  models.CategoryDto:
+    title: CategoryDto
+    type: object
+    properties:
+      slug:
+        type: string
+      title:
+        type: string
+  models.LoginDto:
+    title: LoginDto
+    type: object
+    properties:
+      password:
+        type: string
+      username:
+        type: string
   models.Post:
     title: Post
     type: object
     properties:
       author:
         $ref: '#/definitions/models.User'
+      categories:
+        type: array
+        items:
+          $ref: '#/definitions/models.Category'
       content:
         type: string
+      created_at:
+        type: string
+        format: datetime
       id:
         type: integer
         format: int64
+      title:
+        type: string
+      updated_at:
+        type: string
+        format: datetime
+  models.PostDto:
+    title: PostDto
+    type: object
+    properties:
+      categories:
+        type: array
+        items:
+          $ref: '#/definitions/models.CategoryDto'
+      content:
+        type: string
       title:
         type: string
   models.Token:
@@ -250,6 +293,9 @@ definitions:
     title: User
     type: object
     properties:
+      created_at:
+        type: string
+        format: datetime
       id:
         type: integer
         format: int64
@@ -261,5 +307,16 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/models.Token'
+      updated_at:
+        type: string
+        format: datetime
       username:
         type: string
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    description: Authorization token
+    name: Authorization
+    in: header
+security:
+- ApiKeyAuth: []

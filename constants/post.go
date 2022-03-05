@@ -18,6 +18,7 @@ const LOGIN_SUCCESS = "Login success"
 const INVALID_PASSWORD_ERROR = "Invalid password"
 const EMAIL_NOT_FOUND_ERROR = "Email not found"
 const DUPLICATE_EMAIL_ERROR = "Email already exists"
+const USER_NOT_FOUND_ERROR = "User not found"
 
 /**
  * @Description: Category constants
@@ -38,3 +39,9 @@ const GET_USER_ERROR = "Can't get user"
 const GET_USERS_ERROR = "Can't get users"
 const GET_USER_BY_EMAIL_ERROR = "Can't get user by email"
 const GET_USER_BY_ID_ERROR = "Can't get user by id"
+
+/**
+ * @Description: Token constants
+ */
+
+const INVALID_TOKEN_ERROR = "Invalid token"

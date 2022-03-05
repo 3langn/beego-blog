@@ -1,29 +1,47 @@
 package models
 
-import "github.com/beego/beego/v2/client/orm"
+import (
+	"fmt"
+	"github.com/beego/beego/v2/client/orm"
+)
+
+type CategoryDto struct {
+	Title string `json:"title"`
+	Slug  string `json:"slug"`
+}
 
 type Category struct {
 	Id    int64   `orm:"auto" json:"id"`
 	Title string  `orm:"size(75)" json:"title"`
 	Slug  string  `orm:"size(100)" json:"slug"`
-	Posts []*Post `json:"posts"`
+	Posts []*Post `orm:"reverse(many)" json:"posts,omitempty"`
 }
 
-// create table category
-func (c *Category) TableName() string {
-	return "categories"
-}
+//func (c *Category) TableName() string {
+//	return "categories"
+//}
 
-func (c *Category) Create() error {
-	if _, err := orm.NewOrm().Insert(c); err != nil {
-		return err
+func (c *Category) Create(dto []CategoryDto) ([]*Category, error) {
+	o := orm.NewOrm()
+	var categories []*Category
+	for _, v := range dto {
+		categories = append(categories, &Category{
+			Title: v.Title,
+			Slug:  v.Slug,
+		})
 	}
-	return nil
+
+	_, err := o.InsertMulti(1, categories)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(categories[0])
+	return categories, nil
 }
 
 // get category by id
 func (c *Category) GetById(id int64) error {
-	if err := orm.NewOrm().QueryTable(c.TableName()).Filter("id", id).One(c); err != nil {
+	if err := orm.NewOrm().QueryTable("category").Filter("id", id).One(c); err != nil {
 		return err
 	}
 	return nil
@@ -46,7 +64,7 @@ func (c *Category) Delete() error {
 func (c Category) GetAll() ([]Category, error) {
 	o := orm.NewOrm()
 	var categories []Category
-	_, err := o.QueryTable(c.TableName()).All(&categories)
+	_, err := o.QueryTable("category").All(&categories)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +75,7 @@ func (c *Category) GetAllCategory(order string, offset int64, limit int64) ([]Ca
 	var category []Category
 
 	o := orm.NewOrm()
-	qs := o.QueryTable(c.TableName())
+	qs := o.QueryTable("category")
 
 	_, err := qs.OrderBy(order).Limit(limit, offset).All(&category)
 	if err != nil {
